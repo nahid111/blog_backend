@@ -1,0 +1,18 @@
+[
+  {
+    "_id": "5e9eb186a558fe2f2bbe8998",
+    "role": "admin",
+    "name": "Admin",
+    "avatar": "avatar.png",
+    "email": "admin@gmail.com",
+    "password": "123456"
+  },
+  {
+    "_id": "5ea01108dee5bd181bbd8740",
+    "role": "user",
+    "name": "John Doe",
+    "avatar": "avatar.png",
+    "email": "jdoe@gmail.com",
+    "password": "123456"
+  }
+]
