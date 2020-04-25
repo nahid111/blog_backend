@@ -2,6 +2,8 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/asyncHandler');
 const crypto = require('crypto');
 const sendEmail = require('../utils/sendEmail');
+const path = require('path');
+const fs = require('fs');
 const User = require('../models/User');
 
 
@@ -196,6 +198,74 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, data: user });
 });
+
+
+
+// @desc      Upload avatar for user
+// @route     PUT /api/v1/auth/avatar
+// @access    Private
+// file upload using express-fileupload package
+exports.avatarUpload = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  if (!req.files) return next( new ErrorResponse(400, `No file uploaded`) );
+
+  const file = req.files.avatar;
+  console.log(`\n`, ` avatarUpload() -> file `.black.bgBrightYellow, '\n', file, '\n');
+
+  // Make sure the image is a photo
+  if (!file.mimetype.startsWith('image')) {
+    return next( new ErrorResponse(400, `Please upload an image file`) );
+  }
+  // Check filesize
+  if (file.size > process.env.MAX_FILE_UPLOAD) {
+    return next( new ErrorResponse(400, `Image size must be less than ${process.env.MAX_FILE_UPLOAD}`) );
+  }
+  // Create custom filename
+  file.name = `avatar_${user._id}${path.parse(file.name).ext}`;
+
+  // Saving/uploading the file, replaces the if existing with same name
+  file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async (err) => {
+    if (err) {
+      console.error(err);
+      return next(new ErrorResponse(500, `Server Error, File-Upload Failed`));
+    }
+
+    // update bootcamp with filename
+    await User.findByIdAndUpdate(req.user._id, {avatar: file.name});
+    res.status(200).json({ success: true, data: file.name });
+  });
+});
+
+
+
+
+// @desc      Upload avatar for user
+// @route     PUT /api/v1/auth/avatar
+// @access    Private
+// file upload using multer
+/*
+exports.avatarUpload = asyncHandler(async (req, res, next) => {
+  const user = await Bootcamp.findById(req.user._id);
+  
+  const file = req.file;
+  if (!file) return next( new ErrorResponse(400, `No file uploaded`) );
+  console.log(`\n`, ` avatarUpload() -> file `.black.bgBrightYellow, '\n', file, '\n');
+
+  // delete previous file if exists
+  if(user.avatar && user.avatar !== "no-photo.jpg"){
+    const filePath = path.join(process.env.FILE_UPLOAD_PATH, user.avatar);
+    if (fs.existsSync(filePath)) {
+      console.log(` Deleting ${filePath} `.black.bgMagenta);
+      fs.unlink(filePath, (err) => err && next(err));
+    }
+  }
+
+  // update bootcamp with filename
+  await User.findByIdAndUpdate(req.user._id, {avatar: file.filename});
+  res.status(200).json({ success: true, data: file.filename });
+});
+*/
 
 
 
