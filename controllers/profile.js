@@ -8,9 +8,9 @@ const Profile = require("../models/Profile");
 // @desc    Get all profiles
 // @route   GET /api/v1/profile
 // @access  Public
-// @example {{URL}}/api/v1/profiles?select=name,description&sort=name
-// @example {{URL}}/api/v1/profiles?page=2
-// @example {{URL}}/api/v1/profiles?select=careers&careers[in]=Data Science&limit=100
+// @example {{URL}}/api/v1/profiles?select=company,status&sort=-location <br>
+// @example {{URL}}/api/v1/profiles?limit=1&page=2 <br>
+// @example {{URL}}/api/v1/profiles?select=skills&skills[in]=Python
 exports.getAllProfiles = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.filteredResults);
 });

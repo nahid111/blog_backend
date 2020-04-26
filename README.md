@@ -4,6 +4,10 @@ Backend: Express.js,     Database: MongoDB,     ORM: Mongoose
 </p>
 
 
+## API Documentation
+- [Postman Doc](https://documenter.getpostman.com/view/7833390/SzfB176U?version=latest)
+
+
 ## installation
 - install NodeJs & npm
 - install dependencies 
@@ -27,5 +31,4 @@ $ node seeder -i
 ```
 $ npm run dev
 ```
-
 
