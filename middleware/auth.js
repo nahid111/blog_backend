@@ -14,10 +14,10 @@ exports.protect = asyncHandler(async (req, res, next) => {
     // settoken from Bearer token in header
     token = req.headers.authorization.split(" ")[1];
   }
-  else if (req.cookies.token) {
-    // set token from cookie
-    token = req.cookies.token;
-  }
+  // else if (req.cookies.token) {
+  //   // set token from cookie
+  //   token = req.cookies.token;
+  // }
 
   // Make sure token exists
   if (!token) {
